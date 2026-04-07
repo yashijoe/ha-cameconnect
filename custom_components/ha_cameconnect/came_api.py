@@ -219,24 +219,48 @@ class CameConnectClient:
                         _LOGGER.debug("CAME OAuth: %s", last_err)
                         continue
 
+                    _LOGGER.debug(
+                        "CAME OAuth code obtained [%s]: %s | cookies: %s",
+                        base, code, [(c.key, c.value) for c in s.cookie_jar],
+                    )
+
                     # Step 2 — token exchange on the same session (preserves cookies).
-                    # Try first WITH code_verifier (standard PKCE), then without
-                    # (some CAME deployments validate PKCE server-side only on
-                    # the auth-code step and don't expect the verifier here).
+                    # Try multiple combinations: CAME may require a specific redirect_uri
+                    # and may or may not validate the code_verifier here.
+                    REDIRECT_CANDIDATES = [
+                        "https://www.cameconnect.net/role",
+                        "https://app.cameconnect.net/role",
+                        "https://beta.cameconnect.net/role",
+                    ]
                     tr_text = None
-                    for token_body in [
-                        {
+                    token_attempts = []
+                    for redir in REDIRECT_CANDIDATES:
+                        token_attempts.append({
                             "grant_type": "authorization_code",
                             "code": code,
-                            "redirect_uri": OAUTH_REDIRECT_URI,
+                            "redirect_uri": redir,
                             "code_verifier": verifier,
-                        },
-                        {
+                        })
+                        token_attempts.append({
                             "grant_type": "authorization_code",
                             "code": code,
-                            "redirect_uri": OAUTH_REDIRECT_URI,
-                        },
-                    ]:
+                            "redirect_uri": redir,
+                        })
+                    # Also try without redirect_uri entirely
+                    token_attempts.append({
+                        "grant_type": "authorization_code",
+                        "code": code,
+                        "code_verifier": verifier,
+                    })
+                    token_attempts.append({
+                        "grant_type": "authorization_code",
+                        "code": code,
+                    })
+                    for token_body in token_attempts:
+                        _LOGGER.debug(
+                            "CAME OAuth token exchange body [%s]: %s",
+                            base, token_body,
+                        )
                         tr = await s.post(
                             base + OAUTH_TOKEN_SUFFIX,
                             data=token_body,
