@@ -184,6 +184,10 @@ class CameConnectClient:
             ) as s:
                 try:
                     # Step 1 — authorization code
+                    _LOGGER.debug(
+                        "CAME OAuth auth-code request: url=%s params=%s body=%s",
+                        base + OAUTH_AUTH_CODE_SUFFIX, params, auth_code_body,
+                    )
                     r = await s.post(
                         base + OAUTH_AUTH_CODE_SUFFIX,
                         data=auth_code_body,
@@ -193,12 +197,13 @@ class CameConnectClient:
                         allow_redirects=True,
                     )
                     r_text = await r.text()
+                    _LOGGER.debug("CAME OAuth auth-code raw response [%s]: %s", base, r_text)
                     if r.status != 200:
                         last_err = f"{base} auth-code HTTP {r.status}: {r_text}"
                         _LOGGER.debug("CAME OAuth auth-code failed: %s", last_err)
                         continue
                     try:
-                        data = await r.json(content_type=None)
+                        data = _json.loads(r_text)
                     except Exception:
                         last_err = f"{base} auth-code: invalid JSON: {r_text}"
                         _LOGGER.debug("CAME OAuth: %s", last_err)
