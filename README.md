@@ -178,7 +178,5 @@ If you were using the `hassio-cameconnect` add-on + REST sensor/template cover:
 
 ## Credits
 
-Original proxy add-on by [@jasonmadigan](https://github.com/jasonmadigan/came-connect).  
-
-(Thanks to https://github.com/jasonmadigan/came-connect)
+Original proxy add-on by [@jasonmadigan](https://github.com/jasonmadigan/came-connect).
 CAME Connect cloud API — © CAME S.p.A., Dosson di Conegliano (TV), Italy.
