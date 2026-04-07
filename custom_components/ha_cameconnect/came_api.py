@@ -177,17 +177,13 @@ class CameConnectClient:
             # Use a fresh single-use session with cookie jar so that auth-code
             # and token exchange share cookies/TCP — same behaviour as the
             # original httpx.Client(follow_redirects=True) context manager.
-            jar = aiohttp.CookieJar()
+            jar = aiohttp.CookieJar(unsafe=True)
             async with aiohttp.ClientSession(
                 connector=aiohttp.TCPConnector(ssl=True),
                 cookie_jar=jar,
             ) as s:
                 try:
                     # Step 1 — authorization code
-                    _LOGGER.debug(
-                        "CAME OAuth auth-code request: url=%s params=%s body=%s",
-                        base + OAUTH_AUTH_CODE_SUFFIX, params, auth_code_body,
-                    )
                     r = await s.post(
                         base + OAUTH_AUTH_CODE_SUFFIX,
                         data=auth_code_body,
@@ -197,7 +193,6 @@ class CameConnectClient:
                         allow_redirects=True,
                     )
                     r_text = await r.text()
-                    _LOGGER.debug("CAME OAuth auth-code raw response [%s]: %s", base, r_text)
                     if r.status != 200:
                         last_err = f"{base} auth-code HTTP {r.status}: {r_text}"
                         _LOGGER.debug("CAME OAuth auth-code failed: %s", last_err)
@@ -225,46 +220,25 @@ class CameConnectClient:
                     )
 
                     # Step 2 — token exchange on the same session (preserves cookies).
-                    # Try multiple combinations: CAME may require a specific redirect_uri
-                    # and may or may not validate the code_verifier here.
-                    REDIRECT_CANDIDATES = [
-                        "https://www.cameconnect.net/role",
-                        "https://app.cameconnect.net/role",
-                        "https://beta.cameconnect.net/role",
-                    ]
                     tr_text = None
-                    token_attempts = []
-                    for redir in REDIRECT_CANDIDATES:
-                        token_attempts.append({
-                            "grant_type": "authorization_code",
-                            "code": code,
-                            "redirect_uri": redir,
-                            "code_verifier": verifier,
-                        })
-                        token_attempts.append({
-                            "grant_type": "authorization_code",
-                            "code": code,
-                            "redirect_uri": redir,
-                        })
-                    # Also try without redirect_uri entirely
-                    token_attempts.append({
+                    token_body = {
                         "grant_type": "authorization_code",
                         "code": code,
+                        "redirect_uri": "https://www.cameconnect.net/role",
                         "code_verifier": verifier,
-                    })
-                    token_attempts.append({
-                        "grant_type": "authorization_code",
-                        "code": code,
-                    })
-                    for token_body in token_attempts:
+                    }
+                    for token_body in [token_body]:
                         _LOGGER.debug(
                             "CAME OAuth token exchange body [%s]: %s",
                             base, token_body,
                         )
+                        # Token exchange: use only Authorization header, let aiohttp
+                        # set Content-Type automatically for form-encoded data.
+                        token_headers = {"Authorization": headers["Authorization"]}
                         tr = await s.post(
                             base + OAUTH_TOKEN_SUFFIX,
                             data=token_body,
-                            headers=headers,
+                            headers=token_headers,
                             timeout=aiohttp.ClientTimeout(total=30),
                         )
                         tr_text = await tr.text()
