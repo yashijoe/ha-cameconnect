@@ -1,0 +1,42 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "CAME Connect — Credentials",
+        "description": "Enter your CAME Connect OAuth credentials. You can find client_id and client_secret in the CAME Connect developer portal.",
+        "data": {
+          "came_client_id": "Client ID",
+          "came_client_secret": "Client Secret",
+          "came_username": "Username",
+          "came_password": "Password"
+        }
+      },
+      "device": {
+        "title": "CAME Connect — Device",
+        "description": "Credentials verified. Now configure the device to control.",
+        "data": {
+          "device_name": "Device name (e.g. Main Gate, Garage Door)",
+          "device_id": "Device ID (numeric ID visible in the CAME Connect app)"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Authentication failed. Check your Client ID, Client Secret, username and password.",
+      "cannot_connect": "Unable to reach the CAME Connect cloud. Check your internet connection.",
+      "unknown": "Unexpected error. Check the Home Assistant logs."
+    },
+    "abort": {
+      "already_configured": "This device is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "CAME Connect — Options",
+        "data": {
+          "scan_interval": "Polling interval (seconds, 2–60)"
+        }
+      }
+    }
+  }
+}

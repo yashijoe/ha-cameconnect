@@ -1,0 +1,42 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "CAME Connect — Zugangsdaten",
+        "description": "Gib deine CAME Connect OAuth-Zugangsdaten ein. Client ID und Client Secret findest du im CAME Connect Entwicklerportal.",
+        "data": {
+          "came_client_id": "Client ID",
+          "came_client_secret": "Client Secret",
+          "came_username": "Benutzername",
+          "came_password": "Passwort"
+        }
+      },
+      "device": {
+        "title": "CAME Connect — Gerät",
+        "description": "Zugangsdaten bestätigt. Konfiguriere nun das zu steuernde Gerät.",
+        "data": {
+          "device_name": "Gerätename (z. B. Haupttor, Garage)",
+          "device_id": "Geräte-ID (numerische ID, sichtbar in der CAME Connect App)"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Authentifizierung fehlgeschlagen. Überprüfe Client ID, Client Secret, Benutzername und Passwort.",
+      "cannot_connect": "CAME Connect Cloud nicht erreichbar. Überprüfe deine Internetverbindung.",
+      "unknown": "Unerwarteter Fehler. Prüfe die Home Assistant Logs."
+    },
+    "abort": {
+      "already_configured": "Dieses Gerät ist bereits konfiguriert."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "CAME Connect — Optionen",
+        "data": {
+          "scan_interval": "Abfrageintervall (Sekunden, 2–60)"
+        }
+      }
+    }
+  }
+}

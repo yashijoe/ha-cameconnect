@@ -1,0 +1,13 @@
+{
+  "domain": "ha_cameconnect",
+  "name": "CAME Connect",
+  "version": "2.0.0",
+  "config_flow": true,
+  "documentation": "https://github.com/yashijoe/ha-cameconnect",
+  "issue_tracker": "https://github.com/yashijoe/ha-cameconnect/issues",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@yashijoe"],
+  "iot_class": "cloud_polling",
+  "homeassistant": "2023.1.0"
+}

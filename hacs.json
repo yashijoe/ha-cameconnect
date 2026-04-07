@@ -1,0 +1,6 @@
+{
+  "name": "CAME Connect",
+  "category": "integration",
+  "render_readme": true,
+  "homeassistant": "2023.1.0"
+}
