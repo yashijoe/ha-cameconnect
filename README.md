@@ -1,7 +1,9 @@
 # ha-cameconnect
 
-[![HACS Custom](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://hacs.xyz)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/integration)
 [![HA Version](https://img.shields.io/badge/Home%20Assistant-%3E%3D2023.1-blue)](https://www.home-assistant.io)
+
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=yashijoe&repository=ha-cameconnect&category=integration)
 
 **Native Home Assistant integration for CAME Connect gates and barriers.**  
 No add-on. No proxy. No extra port. Talks directly to the CAME Connect cloud API.
