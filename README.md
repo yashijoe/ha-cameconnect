@@ -224,3 +224,7 @@ If you were using the `hassio-cameconnect` add-on + REST sensor/template cover:
 
 Based on the original CAME Connect proxy by [@jasonmadigan](https://github.com/jasonmadigan/came-connect).  
 CAME Connect cloud API — © CAME S.p.A., Dosson di Conegliano (TV), Italy.
+
+## License
+
+Released under the [MIT License](LICENSE).
